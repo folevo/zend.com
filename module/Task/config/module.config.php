@@ -6,8 +6,8 @@
          )
      ),
      'router' => array(
-                      'routes' => array(
-                   'task' => array(
+             'routes' => array(
+                  'task' => array(
                        'type' => 'Zend\Mvc\Router\Http\Literal',
                       'options' => array(
                               'route' => '/',
@@ -16,8 +16,30 @@
                                   'action' => 'index',
                           )
                       )
-                  )
+                  ),
+                  'data' => array(
+                      'type' => 'Zend\Mvc\Router\Http\Literal',
+                      'options' => array(
+                          'route' => '/data',
+                          'defaults' => array(
+                              'controller' => 'Task\Controller\Index',
+                              'action' => 'data',
+                          )
+                      )
+                  ),
+                 'update' => array(
+                     'type' => 'Zend\Mvc\Router\Http\Literal',
+                     'options' => array(
+                         'route' => '/update',
+                         'defaults' => array(
+                             'controller' => 'Task\Controller\Index',
+                             'action' => 'update',
+                         )
+                     )
+                 )
+
              )
+
          ),
          'controllers' => array(
                  'invokables' => array(
@@ -25,5 +47,8 @@
                       => 'Task\Controller\IndexController'
              )
          ),
+     'strategies' => array(
+         'ViewJsonStrategy',
+     ),
 
  );

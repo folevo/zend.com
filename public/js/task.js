@@ -49,8 +49,8 @@ Ext.onReady(function(){
         ],
         height: 200,
         width: 400,
-        renderTo: Ext.getBody(),
-        style: 'border: solid Red 2px'
+        renderTo: Ext.getBody()
+
 
     });
 });
