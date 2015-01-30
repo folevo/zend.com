@@ -1,62 +1,71 @@
 <?php
- namespace Task\Controller;
+namespace Task\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Db\Adapter\Adapter;
 use Zend\Json\Json;
 use \PDO;
 use Zend\View\Model\JsonModel;
- class IndexController extends AbstractActionController
- {
-         public function indexAction()
+class IndexController extends AbstractActionController
+{
+    public function indexAction()
     {
 
-
-
         return new ViewModel();
- }
-     public function dataAction()
-     {
+    }
 
-         $adapter = new Adapter( array(
-                 'driver' => 'Pdo',
-                 'dsn' => 'mysql:dbname=task;host=localhost',
-                 'username' => 'root',
-                 'password' => '',
-                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+    public function dataAction()
+    {
 
-             )
-         );
-         $response = $this->getResponse();
-         $stmt = $adapter->createStatement('SELECT u.name,e.view_education,c.city,e.id FROM user as u INNER JOIN
+        $adapter = new Adapter( array(
+                'driver' => 'Pdo',
+                'dsn' => 'mysql:dbname=blog;host=localhost',
+                'username' => 'root',
+                'password' => 'root',
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+
+            )
+        );
+
+        $request = $this->getRequest();
+
+        //Получаем данные
+        $start = $request->getPost('start') ? : 0;
+        $limit = $request->getPost('limit') ? : 5;
+
+        $offset = ' LIMIT '.$start.','.$limit;
+
+        $stmt = $adapter->createStatement('SELECT u.name,e.view_education,c.city,e.id FROM user as u INNER JOIN
                                            education as e ON e.id=u.education_id INNER JOIN user_city as uc ON uc.user_id=u.id
-                                           INNER JOIN city as c ON c.id=uc.city_id  ' );
-         $results = $stmt->execute();
-         $data="[";
-         foreach($results as $result){
-             $data.=Json::encode($result).",";
+                                           INNER JOIN city as c ON c.id=uc.city_id  '.$offset );
+        $results = $stmt->execute();
 
-         }
-         $data=substr($data, 0,-1);
+        $data="[";
+        foreach($results as $result){
+            $data.=Json::encode($result).",";
+
+        }
+        $data=substr($data, 0,-1);
         $data.="]";
-         $result = new JsonModel(array(
-             'data' => $data,
-             'success'=>true,
-         ));
+        $result = new JsonModel(array(
+            'data' => $data,
+            'success'=>true,
+        ));
 
-         return $result;
-     }
-     public function updateAction(){
-         $adapter = new Adapter( array(
-                 'driver' => 'Pdo',
-                 'dsn' => 'mysql:dbname=task;host=localhost',
-                 'username' => 'root',
-                 'password' => '',
-                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+        return $result;
+    }
+    public function updateAction(){
 
-             )
-         );
-         $sql = "UPDATE education
+        $adapter = new Adapter( array(
+                'driver' => 'Pdo',
+                'dsn' => 'mysql:dbname=blog;host=localhost',
+                'username' => 'root',
+                'password' => 'root',
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+
+            )
+        );
+        $sql = "UPDATE education
 
         SET  view_education=?
 
@@ -66,10 +75,10 @@ use Zend\View\Model\JsonModel;
 
 
 
-         $stmt = $adapter->createStatement($sql);
-         $stmt->execute([$_POST['id'],$_POST['view_education']]);
-         $response = $this->getResponse();
-         return $response;
-     }
+        $stmt = $adapter->createStatement($sql);
+        $stmt->execute([$_POST['id'],$_POST['view_education']]);
+        $response = $this->getResponse();
+        return $response;
+    }
 
- }
+}

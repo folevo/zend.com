@@ -48,7 +48,7 @@ Ext.onReady(function(){
             })
         ],
         height: 200,
-        width: 400,
+        width: 800,
         renderTo: Ext.getBody()
 
 

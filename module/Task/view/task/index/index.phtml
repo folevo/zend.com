@@ -16,7 +16,7 @@
         var fm = Ext.form;
         var store = Ext.create('Ext.data.Store', {
             model: 'myModel',
-            pageSize: 1,
+            pageSize: 5,
             proxy: {
                 type: 'ajax',
                 url: "<?php echo $this->url('data'); ?>",
@@ -29,8 +29,7 @@
                 }
             },
 
-
-            autoLoad: {start: 0, limit: 2},
+            autoLoad: {start: 0, limit: 50},
             remoteSort: true
         });
         var filters = {
@@ -38,6 +37,7 @@
             encode: true,
             local: false
         };
+        console.log(store);
         var grid = Ext.create('Ext.grid.Panel', {
             store: store,
             plugins: [
@@ -83,7 +83,7 @@
 
             ],
             height: 350,
-            width: 600,
+            width: 800,
             title: 'Простейшая статическая таблица grid',
             renderTo: 'grid4',
             bbar: Ext.create('Ext.PagingToolbar', {
@@ -93,8 +93,7 @@
                 emptyMsg: "No topics to display"
             })
         });
-        console.log(111111111111111111111111111111111111111111111111111111111111111111111);
-        console.log(store.proxy.extraParams);
+
     });
 
 </script>
