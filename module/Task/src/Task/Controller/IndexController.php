@@ -35,20 +35,25 @@ class IndexController extends AbstractActionController
 
         $offset = ' LIMIT '.$start.','.$limit;
 
-        $stmt = $adapter->createStatement('SELECT u.name,e.view_education,c.city,e.id FROM user as u INNER JOIN
+        $stmt = $adapter->createStatement('SELECT u.id,u.name,e.view_education,c.city,e.id as ed_id FROM user as u INNER JOIN
                                            education as e ON e.id=u.education_id INNER JOIN user_city as uc ON uc.user_id=u.id
                                            INNER JOIN city as c ON c.id=uc.city_id  '.$offset );
         $results = $stmt->execute();
 
         $data="[";
+        $i=1;
         foreach($results as $result){
+            $result['userid']=$i;
             $data.=Json::encode($result).",";
+            $i++;
 
         }
+
         $data=substr($data, 0,-1);
         $data.="]";
         $result = new JsonModel(array(
             'data' => $data,
+            'total'=>'54',
             'success'=>true,
         ));
 
